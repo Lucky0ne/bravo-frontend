@@ -8,7 +8,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import { SessionStorage } from 'quasar'
+  import {SessionStorage} from 'quasar'
   import cpPopup from './menu_items/popup.vue'
   export default {
     data () {
@@ -17,13 +17,14 @@
       }
     },
     mounted () {
-      this.fetchMenu()
+      this.fetchMenu(false)
     },
     methods: {
-      fetchMenu () {
+      fetchMenu (usecache) {
         let value = SessionStorage.get.item('menuClient')
-        if (value && value.length > 0) {
-          // console.log(value)
+        // todo: вeal with the undefined value in the storage
+        if (usecache && value && (value !== undefined) && (value.length > 0)) {
+          console.log(value)
           this.menuItems.push.apply(this.menuItems, value)
         }
         else {
@@ -40,6 +41,10 @@
             // console.log(this.menuItems)
           }).catch(e => {
             console.log(e)
+            if (e.response.status === 401) {
+              this.$router.push({path: 'login'})
+              console.log(this.$router)
+            }
           })
         }
       }
