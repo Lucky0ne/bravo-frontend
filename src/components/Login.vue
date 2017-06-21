@@ -3,8 +3,11 @@
 
 <script>
   import { Dialog, Toast } from 'quasar'
+  import apicall from '../apicall'
   export default {
-    data () {},
+    data () {
+      return {}
+    },
     mounted () {
       let router = this.$router
       Dialog.create({
@@ -24,9 +27,18 @@
         buttons: [
           {
             label: 'Ok',
-            handler (data) {
-              Toast.create('Returned ' + JSON.stringify(data))
-              router.go(-1)
+            preventClose: true,
+            handler (data, close) {
+              let q = apicall({router: router})
+              q.post('/auth/login', data).then(response => {
+                close(() => {
+                  Toast.create.positive('Успешный вход в систему в качестве пользователя "' + data.username + '"')
+                })
+                router.back()
+              }).catch(e => {
+                Toast.create.negative(e.apierror)
+                console.log(e.response)
+              })
             }
           }
         ]

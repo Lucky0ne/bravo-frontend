@@ -7,8 +7,8 @@
   </div>
 </template>
 <script>
-  import axios from 'axios'
-  import {SessionStorage} from 'quasar'
+  import apiCall from '../apicall'
+  import { SessionStorage } from 'quasar'
   import cpPopup from './menu_items/popup.vue'
   export default {
     data () {
@@ -17,34 +17,22 @@
       }
     },
     mounted () {
-      this.fetchMenu(false)
+      this.fetchMenu()
     },
     methods: {
-      fetchMenu (usecache) {
+      fetchMenu () {
         let value = SessionStorage.get.item('menuClient')
-        // todo: вeal with the undefined value in the storage
-        if (usecache && value && (value !== undefined) && (value.length > 0)) {
-          console.log(value)
+        if (value !== null) {
           this.menuItems.push.apply(this.menuItems, value)
         }
         else {
-          axios.get('/api/get-main-menu').then(response => {
+          let q = apiCall({router: this.$router})
+          q.get('/api/get-main-menu').then(response => {
             let resp = response.data.children
-            /* resp.map(function (val) {
-             if (val.attr.Caption) {
-             console.log(val.attr.Caption)
-             val.attr.Caption = val.attr.Caption.replace('&', '')
-             }
-             }) */
-            SessionStorage.set('menuClient', resp)
+            if (resp) SessionStorage.set('menuClient', resp)
             this.menuItems.push.apply(this.menuItems, resp)
-            // console.log(this.menuItems)
           }).catch(e => {
             console.log(e)
-            if (e.response.status === 401) {
-              this.$router.push({path: 'login'})
-              console.log(this.$router)
-            }
           })
         }
       }
