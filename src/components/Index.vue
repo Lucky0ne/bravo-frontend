@@ -1,21 +1,14 @@
 <template>
   <q-layout>
     <div slot="header" class="toolbar">
-      <button @click="$refs.leftDrawer.open()">
+      <button @click="$refs.mainMenu.$refs.drawer.open()">
         <i>menu</i>
       </button>
       <q-toolbar-title :padding="0">
         <span>{{appName}} v{{version}}</span>
       </q-toolbar-title>
     </div>
-    <q-drawer swipe-only ref="leftDrawer" id="menuDrawer">
-      <div class="toolbar light">
-        <q-toolbar-title :padding="1">
-          <span>Меню</span>
-        </q-toolbar-title>
-      </div>
-      <m-menu ref="mainMenu" v-bind:drawer="$refs.leftDrawer"></m-menu>
-    </q-drawer>
+    <main-menu ref="mainMenu" @logoff="logoff" @call-unit="openUnit"></main-menu>
     <div class="logo-container non-selectable no-pointer-events">
       <div class="logo">
         <img src="~assets/bravo-logo.png">
@@ -28,7 +21,9 @@
 </template>
 
 <script>
-  import mainM from './MainMenu.vue'
+  import mainMenu from './MainMenu.vue'
+  import apiCall from '../apicall'
+  import { Toast, SessionStorage } from 'quasar'
   export default {
     data () {
       return {
@@ -38,7 +33,25 @@
       }
     },
     components: {
-      'm-menu': mainM
+      'main-menu': mainMenu
+    },
+    methods: {
+      openUnit (unitcode) {
+        this.currentCode = unitcode
+      },
+      logoff () {
+        let router = this.$router
+        let q = apiCall({router: router})
+        q.post('/auth/logoff').then(response => {
+          Toast.create.positive('Сеанс работы завершен')
+          SessionStorage.clear()
+          this.$refs.mainMenu.clear()
+          router.push({path: 'login'})
+        }).catch(e => {
+          Toast.create.negative(e.apierror)
+          console.log(e.response)
+        })
+      }
     }
   }
 </script>

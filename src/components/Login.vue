@@ -29,7 +29,7 @@
             label: 'Ok',
             preventClose: true,
             handler (data, close) {
-              let q = apicall({router: router})
+              let q = apicall()
               q.post('/auth/login', data).then(response => {
                 close(() => {
                   Toast.create.positive('Успешный вход в систему в качестве пользователя "' + data.username + '"')
@@ -46,12 +46,3 @@
     }
   }
 </script>
-<style lang="stylus">
-  .login-page
-    padding 50px
-    .login-card
-      width 90vw
-      max-width 600px
-      i
-      font-size 5rem
-</style>
