@@ -27,10 +27,6 @@
   import apiCall from '../apicall'
   import { Toast, SessionStorage } from 'quasar'
 
-//  function load (component) {
-//    return () => System.import(`components/${component}.vue`)
-//  }
-
   export default {
     data () {
       return {
@@ -38,10 +34,6 @@
         version: '0.0.1',
         currentCode: ''
       }
-    },
-    components: {
-      // 'main-menu': load('MainMenu'),
-      // 'tab-panel': load('tab_panel/TabPanel')
     },
     methods: {
       openUnit (unitcode) {
@@ -53,7 +45,7 @@
         q.post('/auth/logoff').then(response => {
           Toast.create.positive('Сеанс работы завершен')
           SessionStorage.clear()
-          this.$refs.mainMenu.clear()
+          this.$refs.mainMenu.clearMainMenu()
           router.push({path: 'login'})
         }).catch(e => {
           Toast.create.negative(e.apierror)

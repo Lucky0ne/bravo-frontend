@@ -6,7 +6,7 @@
       </q-toolbar-title>
     </div>
     <div class="list no-border platform-delimiter">
-      <template v-for="menuItem in menuItems">
+      <template v-for="menuItem in content">
         <br-mmenu-popup v-if="menuItem.name == 'Popup'" v-bind:attrs="menuItem.attr" v-bind:children="menuItem.children"
                          group="mainmenu" v-on:menu-item-click="onItemClick"></br-mmenu-popup>
       </template>
@@ -15,39 +15,13 @@
 </template>
 
 <script>
-  import apiCall from '../../apicall'
-  import { SessionStorage } from 'quasar'
-  //  import cpPopup from './brMainMenuPopup.vue'
+  import { mapGetters, mapActions } from 'vuex'
   export default {
-    data () {
-      return {
-        menuItems: []
-      }
-    },
-    mounted () {
-      this.fetchMenu()
-    },
+    computed: mapGetters({
+      content: 'allMainMenuContent',
+      iLoaded: 'isMainMenuLoaded'
+    }),
     methods: {
-      fetchMenu () {
-        let value = SessionStorage.get.item('menuClient')
-        if (value !== null) {
-          this.menuItems.push.apply(this.menuItems, value)
-        }
-        else {
-          let q = apiCall({router: this.$router})
-          q.get('/api/get-main-menu').then(response => {
-            let resp = response.data.children
-            if (resp) SessionStorage.set('menuClient', resp)
-            this.menuItems.push.apply(this.menuItems, resp)
-          }).catch(e => {
-            console.log(e)
-          })
-        }
-      },
-      clear () {
-        // this.menuItems.slice(this.menuItems.length)
-        this.menuItems.slice(this.menuItems.length)
-      },
       onItemClick (item) {
         this.$refs.drawer.close()
         if (item.Code === 'Exit') {
@@ -56,7 +30,11 @@
         else {
           this.$emit('call-unit', item.Code)
         }
-      }
+      },
+      ...mapActions(['getMainMenuContent', 'clearMainMenu'])
+    },
+    created () {
+      this.$store.dispatch('getMainMenuContent', this.$router)
     }
   }
 </script>
