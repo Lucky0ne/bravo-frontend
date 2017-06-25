@@ -8,7 +8,7 @@
         <span>{{appName}} v{{version}}</span>
       </q-toolbar-title>
     </div>
-    <main-menu ref="mainMenu" @logoff="logoff" @call-unit="openUnit"></main-menu>
+    <br-mmenu ref="mainMenu" @logoff="logoff" @call-unit="openUnit"></br-mmenu>
     <div class="logo-container non-selectable no-pointer-events">
       <div class="logo">
         <img src="~assets/bravo-logo.png">
@@ -17,13 +17,20 @@
         </p>
       </div>
     </div>
+    <div class="layout-view">
+      <!--tab-panel ref="tabPanel"></tab-panel-->
+    </div>
   </q-layout>
 </template>
 
 <script>
-  import mainMenu from './MainMenu.vue'
   import apiCall from '../apicall'
   import { Toast, SessionStorage } from 'quasar'
+
+//  function load (component) {
+//    return () => System.import(`components/${component}.vue`)
+//  }
+
   export default {
     data () {
       return {
@@ -33,7 +40,8 @@
       }
     },
     components: {
-      'main-menu': mainMenu
+      // 'main-menu': load('MainMenu'),
+      // 'tab-panel': load('tab_panel/TabPanel')
     },
     methods: {
       openUnit (unitcode) {
@@ -63,6 +71,8 @@
     top 50%
     left 50%
     transform translateX(-50%) translateY(-50%)
+    z-index 5
+    opacity 0.2
   .logo
     position absolute
 </style>

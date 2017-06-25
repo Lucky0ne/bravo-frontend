@@ -7,17 +7,17 @@
     </div>
     <div class="list no-border platform-delimiter">
       <template v-for="menuItem in menuItems">
-        <main-menu-popup v-if="menuItem.name == 'Popup'" v-bind:attrs="menuItem.attr" v-bind:children="menuItem.children"
-                         group="mainmenu" v-on:menu-item-click="onItemClick"></main-menu-popup>
+        <br-mmenu-popup v-if="menuItem.name == 'Popup'" v-bind:attrs="menuItem.attr" v-bind:children="menuItem.children"
+                         group="mainmenu" v-on:menu-item-click="onItemClick"></br-mmenu-popup>
       </template>
     </div>
   </q-drawer>
 </template>
 
 <script>
-  import apiCall from '../apicall'
+  import apiCall from '../../apicall'
   import { SessionStorage } from 'quasar'
-  import cpPopup from './menu_items/popup.vue'
+  //  import cpPopup from './brMainMenuPopup.vue'
   export default {
     data () {
       return {
@@ -45,6 +45,7 @@
         }
       },
       clear () {
+        // this.menuItems.slice(this.menuItems.length)
         this.menuItems.slice(this.menuItems.length)
       },
       onItemClick (item) {
@@ -56,9 +57,6 @@
           this.$emit('call-unit', item.Code)
         }
       }
-    },
-    components: {
-      'main-menu-popup': cpPopup
     }
   }
 </script>

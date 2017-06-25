@@ -9,8 +9,10 @@ require(`quasar/dist/quasar.${__THEME}.css`)
 import Vue from 'vue'
 import Quasar from 'quasar'
 import router from './router'
+import brMainMenu from './components/brMainMenu'
 
 Vue.use(Quasar) // Install Quasar Framework
+Vue.use(brMainMenu) // Install Quasar Framework
 
 Quasar.start(() => {
   /* eslint-disable no-new */
