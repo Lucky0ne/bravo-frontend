@@ -13,6 +13,8 @@
       Dialog.create({
         title: 'Вход в систему',
         message: 'Для продолжения работы необходимо авторизоваться.',
+        noEscDismiss: true,
+        noBackdropDismiss: true,
         form: {
           username: {
             type: 'textbox',

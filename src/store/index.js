@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import mainMenu from './modules/mainMenu'
+import openUnits from './modules/openUnits'
 import { SessionStorage } from 'quasar'
 
 Vue.use(Vuex)
@@ -16,7 +17,8 @@ const state = {
 export default new Vuex.Store({
   state,
   modules: {
-    mainMenu
+    mainMenu,
+    openUnits
   },
   strict: debug
 })

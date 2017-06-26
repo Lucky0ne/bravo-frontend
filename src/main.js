@@ -11,9 +11,13 @@ import Quasar from 'quasar'
 import store from './store'
 import router from './router'
 import brMainMenu from './components/brMainMenu'
+import brUnitTabs from './components/brUnitTabs'
+import brUnitView from './components/brUnitView'
 
 Vue.use(Quasar) // Install Quasar Framework
 Vue.use(brMainMenu)
+Vue.use(brUnitTabs)
+Vue.use(brUnitView)
 
 Quasar.start(() => {
   /* eslint-disable no-new */

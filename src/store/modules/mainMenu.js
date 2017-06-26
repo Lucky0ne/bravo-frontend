@@ -11,7 +11,7 @@ const state = {
 
 // mutations
 const mutations = {
-  [types.MAIN_MENU_UPDATED] (state, {content}) {
+  [types.MAIN_MENU_UPDATED] (state, content) {
     state.mainMenuContent = content
   }
 }
@@ -28,13 +28,13 @@ const actions = {
     if (!state.mainMenuContent || (state.mainMenuContent.length === 0)) {
       const content = rootState.storage.get.item('menuClient')
       if (content !== null) {
-        commit(types.MAIN_MENU_UPDATED, {content})
+        commit(types.MAIN_MENU_UPDATED, content)
       }
       else {
         mmapi.getModuleMainMenu(router).then(
           content => {
             rootState.storage.set('menuClient', content)
-            commit(types.MAIN_MENU_UPDATED, {content})
+            commit(types.MAIN_MENU_UPDATED, content)
           }
         )
       }

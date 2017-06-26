@@ -29,6 +29,15 @@
         }
         else {
           this.$emit('call-unit', item.Code)
+          this.$store.dispatch(
+            'openNewUnit',
+            {
+              code: item.Code,
+              name: item.Caption.replace('&', ''),
+              // todo: create and set corresponded element of unit
+              elementObj: null
+            }
+          )
         }
       },
       ...mapActions(['getMainMenuContent', 'clearMainMenu'])

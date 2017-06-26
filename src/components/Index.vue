@@ -1,12 +1,15 @@
 <template>
   <q-layout>
-    <div slot="header" class="toolbar">
-      <button @click="$refs.mainMenu.$refs.drawer.open()">
-        <i>menu</i>
-      </button>
-      <q-toolbar-title :padding="0">
-        <span>{{appName}} v{{version}}</span>
-      </q-toolbar-title>
+    <div slot="header">
+      <div class="toolbar">
+        <button @click="$refs.mainMenu.$refs.drawer.open()">
+          <i>menu</i>
+        </button>
+        <q-toolbar-title :padding="0">
+          <span>{{appName}} v{{version}}</span>
+        </q-toolbar-title>
+      </div>
+      <br-unit-tabs-panel></br-unit-tabs-panel>
     </div>
     <br-mmenu ref="mainMenu" @logoff="logoff" @call-unit="openUnit"></br-mmenu>
     <div class="logo-container non-selectable no-pointer-events">
@@ -18,6 +21,7 @@
       </div>
     </div>
     <div class="layout-view">
+      <br-unit-view-wrap></br-unit-view-wrap>
       <!--tab-panel ref="tabPanel"></tab-panel-->
     </div>
   </q-layout>
@@ -65,6 +69,7 @@
     transform translateX(-50%) translateY(-50%)
     z-index 5
     opacity 0.2
+
   .logo
     position absolute
 </style>
