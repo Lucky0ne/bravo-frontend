@@ -2,6 +2,7 @@
  * Created by igorgo on 25.06.2017.
  */
 import * as types from '../mutation-types'
+
 // initial state
 let removeByAttr = function (arr, attr, value) {
   let i = arr.length
@@ -18,11 +19,23 @@ let removeByAttr = function (arr, attr, value) {
   return arr
 }
 
+let getIndxByAttr = function (arr, attr, value) {
+  let i = arr.length
+  while (i-- > 0) {
+    if (arr[i] &&
+      arr[i].hasOwnProperty(attr) &&
+      (arguments.length > 2 &&
+      arr[i][attr] === value)
+    ) {
+      return i
+    }
+  }
+  return -1
+}
+
 const state = {
-  openUnitsList: [],  // <li v-for="(value, propertyName) in openUnitsList">
-  openUnitsEls: [],  // <li v-for="(value, propertyName) in openUnitsList">
-  activeUnitTab: '',
-  tmp: ''
+  openUnitsList: [],
+  activeUnitTab: ''
 }
 
 // mutations
@@ -30,59 +43,57 @@ const mutations = {
   [types.UNIT_OPENED] (state, unit) {
     state.openUnitsList.push(unit)
   },
-  [types.UNIT_CLOSED] (state, unit) {
-    removeByAttr(state.openUnitsList, 'code', unit.code)
-    removeByAttr(state.openUnitsEls, 'code', unit.code)
+  [types.UNIT_CLOSED] (state, unitcode) {
+    removeByAttr(state.openUnitsList, 'code', unitcode)
   },
-  [types.UNIT_TAB_CHANGED] (state, tab) {
-    state.activeUnitTab = tab
-  },
-  [types.UNIT_TAB_GOT_EL] (state, obj) {
-    console.log(obj.code)
-    state.tmp = obj
-    // state.openUnitsEls.push(obj)
+  [types.UNIT_TAB_CHANGED] (state, unitcode) {
+    state.activeUnitTab = unitcode
   }
 }
 
 // getters
 const getters = {
   getOpenUnits: state => state.openUnitsList,
-  getUnitElementByCode: (state, getters) => (id) => {
-    /* let i = state.openUnitsEls.length
-    while (i-- > 0) {
-      if (state.openUnitsEls[i] &&
-        state.openUnitsEls[i].hasOwnProperty('code') &&
-        state.openUnitsEls[i].code === id
-      ) {
-        return state.openUnitsEls[i].el
-      }
-    } */
-    return null
-  },
   getActiveUnitTabKey: state => state.activeUnitTab
 }
 
 // actions
 const actions = {
   openNewUnit ({commit, state}, unit) {
-    if (!(unit.code in state.openUnitsList)) {
+    if (getIndxByAttr(state.openUnitsList, 'code', unit.code) === -1) {
       commit(types.UNIT_OPENED, unit)
+      commit(types.UNIT_TAB_CHANGED, unit.code)
+    }
+    else {
+      if (state.activeUnitTab !== unit.code) {
+        commit(types.UNIT_TAB_CHANGED, unit.code)
+      }
     }
   },
-  closeOpenedUnit ({commit, state}, unit) {
-    if (unit.code in state.openUnitsList) {
-      commit(types.UNIT_CLOSED, unit)
-      // todo: activate previous/next tab
+  closeOpenedUnit ({commit, state}, unitcode) {
+    let indx = getIndxByAttr(state.openUnitsList, 'code', unitcode)
+    if (indx >= 0) {
+      // if it's currently active tab - have to make active another
+      let needChangeFocus = state.activeUnitTab === unitcode
+      let throwFocusTo = -1
+      // find out to which
+      if (indx > 0) {
+        // to previous
+        throwFocusTo = indx - 1
+      }
+      else {
+        throwFocusTo = state.openUnitsList.length > 1 ? 0 : -1
+      }
+      commit(types.UNIT_CLOSED, unitcode)
+      if (needChangeFocus && throwFocusTo >= 0) {
+        commit(types.UNIT_TAB_CHANGED, state.openUnitsList[throwFocusTo].code)
+      }
     }
   },
   activateUnitTab ({commit, state}, code) {
     if (state.activeUnitTab !== code) {
       commit(types.UNIT_TAB_CHANGED, code)
     }
-  },
-  addOpenUnitElement ({commit, state}, obj) {
-    commit(types.UNIT_TAB_GOT_EL, obj)
-    commit(types.UNIT_TAB_CHANGED, obj.code)
   }
 }
 

@@ -5,10 +5,11 @@
 </template>
 
 <script>
+  import { Events } from 'quasar'
   export default {
     methods: {
       clickItem: function () {
-        this.$emit('item-click', this.$props.attrs)
+        Events.$emit('main-menu-item-click', this.$props.attrs)
       }
     },
     props: ['attrs']

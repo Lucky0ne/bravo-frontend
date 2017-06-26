@@ -8,41 +8,39 @@
     <div class="list no-border platform-delimiter">
       <template v-for="menuItem in content">
         <br-mmenu-popup v-if="menuItem.name == 'Popup'" v-bind:attrs="menuItem.attr" v-bind:children="menuItem.children"
-                         group="mainmenu" v-on:menu-item-click="onItemClick"></br-mmenu-popup>
+                        group="mainmenu"></br-mmenu-popup>
       </template>
     </div>
   </q-drawer>
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
+  import {Events} from 'quasar'
   export default {
     computed: mapGetters({
       content: 'allMainMenuContent',
       iLoaded: 'isMainMenuLoaded'
     }),
     methods: {
-      onItemClick (item) {
+      ...mapActions(['getMainMenuContent', 'clearMainMenu'])
+    },
+    created () {
+      Events.$on('main-menu-item-click', (item) => {
         this.$refs.drawer.close()
         if (item.Code === 'Exit') {
           this.$emit('logoff')
         }
         else {
-          this.$emit('call-unit', item.Code)
           this.$store.dispatch(
             'openNewUnit',
             {
               code: item.Code,
-              name: item.Caption.replace('&', ''),
-              // todo: create and set corresponded element of unit
-              elementObj: null
+              name: item.Caption.replace('&', '').replace('…', '')
             }
           )
         }
-      },
-      ...mapActions(['getMainMenuContent', 'clearMainMenu'])
-    },
-    created () {
+      })
       this.$store.dispatch('getMainMenuContent', this.$router)
     }
   }

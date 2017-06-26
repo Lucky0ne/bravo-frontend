@@ -36,13 +36,13 @@
   >
     <i v-if="icon" class="q-tabs-icon">{{icon}}</i>
     <span class="q-tab-label">
-      <slot></slot>
+      <slot></slot><i @click.stop.prevent="closeTab()">close</i>
     </span>
   </div>
 </template>
 
 <script>
-  import { Utils } from 'quasar'
+  import {Utils} from 'quasar'
 
   export default {
     props: {
@@ -68,7 +68,7 @@
         return this.$parent.activeTab === this.uid
       },
       targetElement () {
-        return this.$store.getters.getUnitElementByCode(this.uid)
+        return this.$parent.unitrefs['ou_' + this.uid]
       }
     },
     watch: {
@@ -105,15 +105,17 @@
           }
         }
       },
+      closeTab () {
+        this.$store.dispatch('closeOpenedUnit', this.uid)
+      },
       deactivate () {
         if (this.isActive && !this.disable) {
           this.$parent.setActiveTab(false)
         }
       },
       setTargetVisibility (visible) {
-        // console.log(this.targetElement)
         if (this.targetElement) {
-          this.targetElement.style.display = visible ? '' : 'none'
+          this.targetElement[0].$el.style.display = visible ? '' : 'none'
         }
       },
       __selectTabIfRouteMatches () {

@@ -11,18 +11,14 @@
       </div>
       <br-unit-tabs-panel></br-unit-tabs-panel>
     </div>
-    <br-mmenu ref="mainMenu" @logoff="logoff" @call-unit="openUnit"></br-mmenu>
+    <br-mmenu ref="mainMenu" @logoff="logoff"></br-mmenu>
     <div class="logo-container non-selectable no-pointer-events">
       <div class="logo">
         <img src="~assets/bravo-logo.png">
-        <p class="caption text-center">
-          <span>{{currentCode}}</span>
-        </p>
       </div>
     </div>
     <div class="layout-view">
       <br-unit-view-wrap></br-unit-view-wrap>
-      <!--tab-panel ref="tabPanel"></tab-panel-->
     </div>
   </q-layout>
 </template>
@@ -35,14 +31,10 @@
     data () {
       return {
         appName: 'PROJECT BRAVO',
-        version: '0.0.1',
-        currentCode: ''
+        version: '0.0.1'
       }
     },
     methods: {
-      openUnit (unitcode) {
-        this.currentCode = unitcode
-      },
       logoff () {
         let router = this.$router
         let q = apiCall({router: router})
