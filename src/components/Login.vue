@@ -37,6 +37,7 @@
                   Toast.create.positive('Успешный вход в систему в качестве пользователя "' + data.username + '"')
                 })
                 router.back()
+                this.$store.dispatch('getMainMenuContent', router)
               }).catch(e => {
                 Toast.create.negative(e.apierror)
                 console.log(e.response)

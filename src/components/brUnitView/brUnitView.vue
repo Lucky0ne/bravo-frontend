@@ -1,24 +1,20 @@
 <template>
-  <div>
-    <h1>
-      {{unitcode}}
-    </h1>
+  <div class="card bg-teal text-white text-center">
+    <div class="card-title">
+      <big>{{unitcode}}</big>
+    </div>
+    <div class="card-content">
+      Unit content
+    </div>
   </div>
 </template>
 
 <script>
+  import {Events} from 'quasar'
   export default {
     props: ['unitcode'],
     mounted () {
-      this.$nextTick(() => {
-        this.$store.dispatch(
-          'addOpenUnitElement',
-          {
-            code: this.$vnode.data.key,
-            el: this.$parent.$refs[this.$vnode.data.key]
-          }
-        )
-      })
+      Events.$emit('on-unit-add', this.$parent.$refs)
     }
   }
 </script>
