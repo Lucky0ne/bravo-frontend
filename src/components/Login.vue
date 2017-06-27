@@ -32,12 +32,11 @@
             preventClose: true,
             handler (data, close) {
               let q = apicall()
-              q.post('/auth/login', data).then(response => {
+              q.post('/auth/login', data).then(() => {
                 close(() => {
                   Toast.create.positive('Успешный вход в систему в качестве пользователя "' + data.username + '"')
+                  router.back()
                 })
-                router.back()
-                this.$store.dispatch('getMainMenuContent', router)
               }).catch(e => {
                 Toast.create.negative(e.apierror)
                 console.log(e.response)

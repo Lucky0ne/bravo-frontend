@@ -25,7 +25,7 @@ const getters = {
 // actions
 const actions = {
   getMainMenuContent ({commit, state, rootState}, router) {
-    if (!state.mainMenuContent || (state.mainMenuContent.length === 0)) {
+    if (!state.mainMenuContent || !state.mainMenuContent.isArray || (state.mainMenuContent.length === 0)) {
       const content = rootState.storage.get.item('menuClient')
       if (content !== null) {
         commit(types.MAIN_MENU_UPDATED, content)
