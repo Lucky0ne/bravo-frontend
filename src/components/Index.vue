@@ -19,6 +19,7 @@
     </div>
     <div class="layout-view">
       <br-unit-view-wrap></br-unit-view-wrap>
+      <br-unit-view-grid></br-unit-view-grid>
     </div>
   </q-layout>
 </template>
