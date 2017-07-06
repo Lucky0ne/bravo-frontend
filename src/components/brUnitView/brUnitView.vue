@@ -4,7 +4,7 @@
       <big>{{unitcode}}</big>
     </div>
     <div class="card-content">
-      Unit content
+      <br-unit-view-grid :data="table">unit content</br-unit-view-grid>
     </div>
   </div>
 </template>
@@ -15,7 +15,14 @@
     props: ['unitcode'],
     mounted () {
       Events.$emit('on-unit-add', this.$parent.$refs)
+    },
+
+    computed: {
+      table () {
+        return this.$store.getters.getOpenUnits
+      }
     }
+
   }
 </script>
 
