@@ -38,7 +38,7 @@
         columns: [
           { label: 'Name', field: 'name', width: '80px', sort: true },
           { label: 'Description', field: 'description', width: '150px', sort: true },
-          { label: 'First Brewed', field: 'first_brewed', width: '50px', sort: true },
+          { label: 'Brewed', field: 'first_brewed', width: '50px', sort: true },
           { label: 'Picture', field: 'image_url', width: '50px' }
         ],
         configs: {
